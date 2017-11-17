@@ -27,7 +27,7 @@ script:
 #  - ./01_hello-world
 
  #2
-  - cd ../../2_sdl-dynamic
+  - cd ../../02_sdl-dynamic
   - 'if [ ! -d "./build" ];
         then mkdir build;
      fi'
@@ -37,7 +37,7 @@ script:
 #  - ./2_sdl-dynamic
   
 #3
-  - cd ../../2_sdl_static
+  - cd ../../02_sdl_static
   - 'if [ ! -d "./build" ];
         then mkdir build;
      fi'
