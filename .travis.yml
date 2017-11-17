@@ -24,7 +24,7 @@ script:
   - cd build
   - cmake ..
   - make
-#  - ./01_hello-world
+  - ./01_hello-world
 
  #2
   - cd ../../02_sdl-dynamic
@@ -34,14 +34,14 @@ script:
   - cd build
   - cmake ..
   - make
-#  - ./2_sdl-dynamic
+  - ./02_sdl-dynamic
   
 #3
-  - cd ../../02_sdl_static
+  - cd ../../02_sdl-static
   - 'if [ ! -d "./build" ];
         then mkdir build;
      fi'
   - cd build
   - cmake ..
   - make
-#  - ./2_sdl_static
+  - ./02_sdl-static
