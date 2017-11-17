@@ -4,8 +4,44 @@ compiler:
   - gcc
   - clang
 
+sudo: required
+
+before_install:
+    - sudo apt-get install libsdl2-2.0-0
+    - wget https://www.libsdl.org/release/SDL2-2.0.7.tar.gz -O SDL2-2.0.7.tar.gz
+    - tar -xzvf SDL2-2.0.7.tar.gz
+
+
+install:
+    - "(cd SDL2-2.0.7 && ./configure && make && sudo make install)"
+
 script:
-  - mkdir build
+#1
+  - cd 01_hello-world
+  - 'if [ ! -d "./build" ];
+        then mkdir build;
+     fi'
   - cd build
   - cmake ..
   - make
+#  - ./01_hello-world
+
+ #2
+  - cd ../../2_sdl-dynamic
+  - 'if [ ! -d "./build" ];
+        then mkdir build;
+     fi'
+  - cd build
+  - cmake ..
+  - make
+#  - ./2_sdl-dynamic
+  
+#3
+  - cd ../../2_sdl_static
+  - 'if [ ! -d "./build" ];
+        then mkdir build;
+     fi'
+  - cd build
+  - cmake ..
+  - make
+#  - ./2_sdl_static
