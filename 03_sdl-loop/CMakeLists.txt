@@ -11,7 +11,7 @@ endif()
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/Debug)
 add_executable(${PROJECT_NAME} main.cpp)
-#target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_11)
 
 find_library(SDL2_LIB libSDL2.a)
 
