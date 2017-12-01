@@ -11,7 +11,7 @@ cd ../bin/Debug
 ./01_hello-world
 
  #2
-cd ../../02_sdl-dynamic
+cd ../../../02_sdl-dynamic
 #'if [ ! -d "./build" ];
 #    then mkdir build;
 #fi'
@@ -23,7 +23,7 @@ cd ../bin/Debug
 ./02_sdl-dynamic
 
 #3
-cd ../../02_sdl-static
+cd ../../../02_sdl-static
 #'if [ ! -d "./build" ];
 #    then mkdir build;
 #fi'
