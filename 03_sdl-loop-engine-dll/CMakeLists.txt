@@ -12,7 +12,7 @@ set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/Debug)
 
 add_library(engine SHARED engine.cpp)
-target_compile_features(engine PUBLIC cxx_std_17)
+#target_compile_features(engine PUBLIC cxx_std_17)
 
 #if(WIN32)   
 target_compile_definitions(engine PRIVATE "-DENGINE_DECLSPEC=__declspec(dllexport)")
