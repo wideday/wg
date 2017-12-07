@@ -4,6 +4,9 @@
 #include <array>
 #include <cassert>
 #include <exception>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
@@ -52,6 +55,16 @@ namespace ns {
 static const int WINDOW_WIDTH = 640;
 static const int WINDOW_HEIGHT = 480;
 const char* WINDOW_TITLE = "Title";
+
+void Vertex::add(float a) {
+  this->x += a;
+  this->y += a;
+}
+void Vertex::multiply(float a) {
+  this->x *= a;
+  this->y *= a;
+}
+
 std::ostream& operator<<(std::ostream& out, const SDL_version& v) {
   out << static_cast<int>(v.major) << '.';
   out << static_cast<int>(v.minor) << '.';
@@ -72,6 +85,19 @@ std::istream& operator>>(std::istream& is, Triangle& t) {
   is >> t.t[1];
   is >> t.v[2];
   is >> t.t[2];
+  return is;
+}
+
+std::istream& operator>>(std::istream& is, Triangle_2& t) {
+  is >> t.v[0];
+  is >> t.t_back[0];
+  is >> t.t_model[0];
+  is >> t.v[1];
+  is >> t.t_back[1];
+  is >> t.t_model[1];
+  is >> t.v[2];
+  is >> t.t_back[2];
+  is >> t.t_model[2];
   return is;
 }
 
@@ -287,9 +313,9 @@ class Engine_impl final : public IEngine {
     glUseProgram(program);
     ENGINE_GL_CHECK();
 
-    texture = load_texture("sand_brown.png", 0);
-    texture1 = load_texture("tank.png", 0);
-    texture2 = load_texture("clouds.png", 0);
+    texture_back = load_texture("sand_brown.png", 0);
+    texture_model = load_texture("tank.png", 0);
+    texture_up = load_texture("clouds.png", 0);
     GLint textureLocation = glGetUniformLocation(program, "u_ourTexture");
     ENGINE_GL_CHECK();
     glActiveTexture(GL_TEXTURE0);
@@ -356,6 +382,27 @@ class Engine_impl final : public IEngine {
     return texture;
   }
 
+  void render_triangle(Vertex const* vertex, Vertex const* textur,
+                       GLuint texture) {
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), &vertex[0]);
+    ENGINE_GL_CHECK();
+    glEnableVertexAttribArray(0);
+    ENGINE_GL_CHECK();
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), &textur[0]);
+    ENGINE_GL_CHECK();
+    glEnableVertexAttribArray(1);
+    ENGINE_GL_CHECK();
+
+    glBindTexture(GL_TEXTURE_2D, texture);
+    ENGINE_GL_CHECK();
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    ENGINE_GL_CHECK();
+
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
+    ENGINE_GL_CHECK();
+  }
+
   void render_triangle(const Triangle& t) final {
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), &t.v[0]);
     ENGINE_GL_CHECK();
@@ -366,15 +413,15 @@ class Engine_impl final : public IEngine {
     glEnableVertexAttribArray(1);
     ENGINE_GL_CHECK();
 
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glBindTexture(GL_TEXTURE_2D, texture_back);
     ENGINE_GL_CHECK();
     glDrawArrays(GL_TRIANGLES, 0, 3);
     ENGINE_GL_CHECK();
-    glBindTexture(GL_TEXTURE_2D, texture1);
+    glBindTexture(GL_TEXTURE_2D, texture_model);
     ENGINE_GL_CHECK();
     glDrawArrays(GL_TRIANGLES, 0, 3);
     ENGINE_GL_CHECK();
-    glBindTexture(GL_TEXTURE_2D, texture2);
+    glBindTexture(GL_TEXTURE_2D, texture_up);
     ENGINE_GL_CHECK();
     glDrawArrays(GL_TRIANGLES, 0, 3);
     ENGINE_GL_CHECK();
@@ -383,6 +430,32 @@ class Engine_impl final : public IEngine {
     glDisableVertexAttribArray(1);
     ENGINE_GL_CHECK();
   }
+
+  void render_triangle(const Triangle_2& t) final {
+    render_triangle(t.v, t.t_back, texture_back);
+
+    render_triangle(t.v, t.t_model, texture_model);
+
+    render_triangle(t.v, t.t_back, texture_up);
+
+    Vertex new_v[3] = {Vertex(t.v[0]), Vertex(t.v[1]), Vertex(t.v[2])};
+    for (Vertex& element : new_v) {
+      element.add(0.5f);
+      element.multiply(0.2f);
+      element.add(-0.5f);
+    }
+    render_triangle(new_v, t.t_model, texture_back);
+    render_triangle(new_v, t.t_model, texture_up);
+
+    Vertex new_v_minimodel[3] = {Vertex(t.t_back[0]), Vertex(t.t_back[1]),
+                                 Vertex(t.t_back[2])};
+    for (Vertex& element : new_v_minimodel) {
+      element.multiply(0.2f);
+      element.add(-0.5f);
+    }
+    render_triangle(new_v_minimodel, t.t_model, texture_model);
+  }
+
   void swap_buffers() final {
     SDL_GL_SwapWindow(window);
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
@@ -408,6 +481,9 @@ class Engine_impl final : public IEngine {
     }
     return false;
   }
+
+  float get_time() final { return SDL_GetTicks() * 0.001f; }
+
   int finish() final {
     // glDeleteBuffers(1, &vbo);
     // glDeleteProgram(program);
@@ -420,9 +496,9 @@ class Engine_impl final : public IEngine {
  private:
   SDL_Window* window = nullptr;
   SDL_GLContext gl_context = nullptr;
-  GLuint texture = 0;
-  GLuint texture1 = 0;
-  GLuint texture2 = 0;
+  GLuint texture_back = 0;
+  GLuint texture_model = 0;
+  GLuint texture_up = 0;
 };
 
 IEngine* create_engine() {

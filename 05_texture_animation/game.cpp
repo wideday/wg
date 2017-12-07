@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <cmath>
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
@@ -39,11 +40,26 @@ int main(int /*argc*/, char* /*argv*/ []) {
 
     std::ifstream file("vertexes.txt");
     assert(!!file);
-    ns::Triangle tr1;
-    ns::Triangle tr2;
+    ns::Triangle_2 tr1;
+    ns::Triangle_2 tr2;
     file >> tr1 >> tr2;
-    engine->render_triangle(tr1);
+
+    float time = engine->get_time();
+    float s = sin(time) / 5;
+    float c = cos(time) / 5;
+
+    for (auto& v : tr1.t_back) {
+      v.x += c;
+      v.y += s;
+    }
+    for (auto& v : tr2.t_back) {
+      v.x += c;
+      v.y += s;
+    }
+
     engine->render_triangle(tr2);
+    engine->render_triangle(tr1);
+
     engine->swap_buffers();
   }
 
