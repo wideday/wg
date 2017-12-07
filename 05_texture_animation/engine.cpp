@@ -437,23 +437,68 @@ class Engine_impl final : public IEngine {
     render_triangle(t.v, t.t_model, texture_model);
 
     render_triangle(t.v, t.t_back, texture_up);
+  }
 
+  void render_triangle_minimap(const Triangle_2& t) final {
     Vertex new_v[3] = {Vertex(t.v[0]), Vertex(t.v[1]), Vertex(t.v[2])};
     for (Vertex& element : new_v) {
       element.add(0.5f);
       element.multiply(0.2f);
       element.add(-0.5f);
     }
-    render_triangle(new_v, t.t_model, texture_back);
-    render_triangle(new_v, t.t_model, texture_up);
-
     Vertex new_v_minimodel[3] = {Vertex(t.t_back[0]), Vertex(t.t_back[1]),
                                  Vertex(t.t_back[2])};
     for (Vertex& element : new_v_minimodel) {
       element.multiply(0.2f);
       element.add(-0.5f);
     }
+    render_triangle(new_v, t.t_model, texture_back);
     render_triangle(new_v_minimodel, t.t_model, texture_model);
+    render_triangle(new_v, t.t_model, texture_up);
+  }
+
+  void render_quad(const Triangle_2& tr1, const Triangle_2& tr2) {
+    render_triangle(tr1.v, tr1.t_back, texture_back);
+    render_triangle(tr2.v, tr2.t_back, texture_back);
+
+    render_triangle(tr1.v, tr1.t_model, texture_model);
+    render_triangle(tr2.v, tr2.t_model, texture_model);
+
+    render_triangle(tr1.v, tr1.t_back, texture_up);
+    render_triangle(tr2.v, tr2.t_back, texture_up);
+
+    Vertex new_v_1[3] = {Vertex(tr1.v[0]), Vertex(tr1.v[1]), Vertex(tr1.v[2])};
+    for (Vertex& element : new_v_1) {
+      element.add(0.5f);
+      element.multiply(0.2f);
+      element.add(-0.5f);
+    }
+    render_triangle(new_v_1, tr1.t_model, texture_back);
+    Vertex new_v_2[3] = {Vertex(tr2.v[0]), Vertex(tr2.v[1]), Vertex(tr2.v[2])};
+    for (Vertex& element : new_v_2) {
+      element.add(0.5f);
+      element.multiply(0.2f);
+      element.add(-0.5f);
+    }
+    render_triangle(new_v_2, tr2.t_model, texture_back);
+
+    Vertex new_v_minimodel_1[3] = {Vertex(tr1.t_back[0]), Vertex(tr1.t_back[1]),
+                                   Vertex(tr1.t_back[2])};
+    for (Vertex& element : new_v_minimodel_1) {
+      element.multiply(0.2f);
+      element.add(-0.5f);
+    }
+    render_triangle(new_v_minimodel_1, tr1.t_model, texture_model);
+    Vertex new_v_minimodel_2[3] = {Vertex(tr2.t_back[0]), Vertex(tr2.t_back[1]),
+                                   Vertex(tr2.t_back[2])};
+    for (Vertex& element : new_v_minimodel_2) {
+      element.multiply(0.2f);
+      element.add(-0.5f);
+    }
+    render_triangle(new_v_minimodel_2, tr2.t_model, texture_model);
+
+    render_triangle(new_v_1, tr1.t_model, texture_up);
+    render_triangle(new_v_2, tr2.t_model, texture_up);
   }
 
   void swap_buffers() final {

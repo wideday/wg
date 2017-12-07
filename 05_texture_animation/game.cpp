@@ -45,8 +45,8 @@ int main(int /*argc*/, char* /*argv*/ []) {
     file >> tr1 >> tr2;
 
     float time = engine->get_time();
-    float s = sin(time) / 5;
-    float c = cos(time) / 5;
+    float s = sin(time) * 4 / 10;
+    float c = cos(time) * 4 / 10;
 
     for (auto& v : tr1.t_back) {
       v.x += c;
@@ -57,8 +57,7 @@ int main(int /*argc*/, char* /*argv*/ []) {
       v.y += s;
     }
 
-    engine->render_triangle(tr2);
-    engine->render_triangle(tr1);
+    engine->render_quad(tr1, tr2);
 
     engine->swap_buffers();
   }

@@ -81,8 +81,10 @@ class NS_DECLSPEC IEngine {
  public:
   virtual ~IEngine();
   virtual int finish() = 0;
+  virtual void render_quad(const Triangle_2&, const Triangle_2&) = 0;
   virtual void render_triangle(const Triangle&) = 0;
   virtual void render_triangle(const Triangle_2&) = 0;
+  virtual void render_triangle_minimap(const Triangle_2&) = 0;
   virtual void swap_buffers() = 0;
   virtual bool read_event(Event& event) = 0;
   virtual std::string init(const std::string& config) = 0;
