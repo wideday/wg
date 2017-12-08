@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.0)
-project(05_vertex-morphing)
+cmake_minimum_required(VERSION 3.9)
+project(05_texture-animation)
 set(CMAKE_CXX_STANDARD 17)
 
 if(MSVC)
