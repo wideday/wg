@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.2)
 project(05_texture-animation)
 set(CMAKE_CXX_STANDARD 17)
 
