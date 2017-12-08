@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.2)
 project(05_texture-animation)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 
 if(MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++11")
 else()
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -Werror")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -Werror -std:c++11")
 endif()
 
 set(CMAKE_BUILD_TYPE Debug)
