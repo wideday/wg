@@ -15,11 +15,11 @@
 #include <GL/glew.h>
 
 #include <SDL2/SDL.h>
-#if __MINGW32__
-#include <SDL2/SDL_opengl.h>
-#else
-#include <SDL2/SDL_opengles2.h>
-#endif
+//#if __MINGW32__
+//#include <SDL2/SDL_opengl.h>
+//#else
+//#include <SDL2/SDL_opengles2.h>
+//#endif
 
 #define ENGINE_GL_CHECK()                                             \
                                                                       \
