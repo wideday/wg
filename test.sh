@@ -1,5 +1,5 @@
 #5_2
-cd 05_texture-animation
+cd 05_texture_animation
 #'if [ ! -d "./build" ];
 #    then mkdir build;
 #fi'
