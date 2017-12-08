@@ -35,8 +35,8 @@ elseif(UNIX)
     target_link_libraries(engine
                -lSDL2
                -lGL
-               -lglew32
-               -lglu32
+               -lGLEW
+               -lGLU
                )
 endif()
 
