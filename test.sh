@@ -7,7 +7,7 @@ mkdir build
 cd build
 cmake ..
 make
-cd ../bin/Debug
-cp ../../vertexes.txt ./
-cp ../../*.png ./
-./05_texture_animation_game
+#cd ../bin/Debug
+#cp ../../vertexes.txt ./
+#cp ../../*.png ./
+#./05_texture_animation_game
