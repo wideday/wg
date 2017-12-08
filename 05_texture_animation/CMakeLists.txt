@@ -15,9 +15,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/Debug)
 add_library(engine SHARED engine.cpp)
 #target_compile_features(engine PUBLIC cxx_std_17)
 
-#if(WIN32)   
-target_compile_definitions(engine PRIVATE "-DNS_DECLSPEC=__declspec(dllexport)")
-#endif(WIN32)
+if(WIN32)   
+    target_compile_definitions(engine PRIVATE "-DNS_DECLSPEC=__declspec(dllexport)")
+endif(WIN32)
 
 find_library(SDL2_LIB NAMES SDL2)
 
