@@ -31,8 +31,8 @@ struct Vertex {
   Vertex() : x(0.f), y(0.f) {}
   Vertex(float a, float b) : x(a), y(b) {}
   Vertex(const Vertex& copy) : x(copy.x), y(copy.y) {}
-  void add(float);
-  void multiply(float);
+  Vertex& add(float);
+  Vertex& multiply(float);
   float x;
   float y;
 };
@@ -63,6 +63,7 @@ struct NS_DECLSPEC Triangle_2 {
     t_model[1] = Vertex();
     t_model[2] = Vertex();
   }
+  void init(float koef);
   Vertex v[3];
   Vertex t_back[3];
   Vertex t_model[3];
@@ -81,7 +82,8 @@ class NS_DECLSPEC IEngine {
  public:
   virtual ~IEngine();
   virtual int finish() = 0;
-  virtual void render_quad(const Triangle_2&, const Triangle_2&) = 0;
+  virtual void render_quad(const Triangle_2&, const Triangle_2&,
+                           const float) = 0;
   virtual void render_triangle(const Triangle&) = 0;
   virtual void render_triangle(const Triangle_2&) = 0;
   virtual void render_triangle_minimap(const Triangle_2&) = 0;

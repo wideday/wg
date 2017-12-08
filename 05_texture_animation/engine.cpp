@@ -56,13 +56,22 @@ static const int WINDOW_WIDTH = 640;
 static const int WINDOW_HEIGHT = 480;
 const char* WINDOW_TITLE = "Title";
 
-void Vertex::add(float a) {
+Vertex& Vertex::add(float a) {
   this->x += a;
   this->y += a;
+  return *this;
 }
-void Vertex::multiply(float a) {
+Vertex& Vertex::multiply(float a) {
   this->x *= a;
   this->y *= a;
+  return *this;
+}
+
+void Triangle_2::init(float koef) {
+  for (size_t i = 0; i < 3; ++i) {
+    this->t_back[i] =
+        Vertex(this->t_model[i]).multiply(koef).add((1 - koef) / 2);
+  }
 }
 
 std::ostream& operator<<(std::ostream& out, const SDL_version& v) {
@@ -90,13 +99,13 @@ std::istream& operator>>(std::istream& is, Triangle& t) {
 
 std::istream& operator>>(std::istream& is, Triangle_2& t) {
   is >> t.v[0];
-  is >> t.t_back[0];
+  //  is >> t.t_back[0];
   is >> t.t_model[0];
   is >> t.v[1];
-  is >> t.t_back[1];
+  //  is >> t.t_back[1];
   is >> t.t_model[1];
   is >> t.v[2];
-  is >> t.t_back[2];
+  //  is >> t.t_back[2];
   is >> t.t_model[2];
   return is;
 }
@@ -457,7 +466,8 @@ class Engine_impl final : public IEngine {
     render_triangle(new_v, t.t_model, texture_up);
   }
 
-  void render_quad(const Triangle_2& tr1, const Triangle_2& tr2) {
+  void render_quad(const Triangle_2& tr1, const Triangle_2& tr2,
+                   const float koef_minimap) {
     render_triangle(tr1.v, tr1.t_back, texture_back);
     render_triangle(tr2.v, tr2.t_back, texture_back);
 
@@ -470,14 +480,14 @@ class Engine_impl final : public IEngine {
     Vertex new_v_1[3] = {Vertex(tr1.v[0]), Vertex(tr1.v[1]), Vertex(tr1.v[2])};
     for (Vertex& element : new_v_1) {
       element.add(0.5f);
-      element.multiply(0.2f);
+      element.multiply(koef_minimap);
       element.add(-0.5f);
     }
     render_triangle(new_v_1, tr1.t_model, texture_back);
     Vertex new_v_2[3] = {Vertex(tr2.v[0]), Vertex(tr2.v[1]), Vertex(tr2.v[2])};
     for (Vertex& element : new_v_2) {
       element.add(0.5f);
-      element.multiply(0.2f);
+      element.multiply(koef_minimap);
       element.add(-0.5f);
     }
     render_triangle(new_v_2, tr2.t_model, texture_back);
@@ -485,14 +495,14 @@ class Engine_impl final : public IEngine {
     Vertex new_v_minimodel_1[3] = {Vertex(tr1.t_back[0]), Vertex(tr1.t_back[1]),
                                    Vertex(tr1.t_back[2])};
     for (Vertex& element : new_v_minimodel_1) {
-      element.multiply(0.2f);
+      element.multiply(koef_minimap);
       element.add(-0.5f);
     }
     render_triangle(new_v_minimodel_1, tr1.t_model, texture_model);
     Vertex new_v_minimodel_2[3] = {Vertex(tr2.t_back[0]), Vertex(tr2.t_back[1]),
                                    Vertex(tr2.t_back[2])};
     for (Vertex& element : new_v_minimodel_2) {
-      element.multiply(0.2f);
+      element.multiply(koef_minimap);
       element.add(-0.5f);
     }
     render_triangle(new_v_minimodel_2, tr2.t_model, texture_model);

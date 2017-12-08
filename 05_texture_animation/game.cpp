@@ -38,15 +38,21 @@ int main(int /*argc*/, char* /*argv*/ []) {
       }
     }
 
+    float koef_minimap = (float)(1) / 4;
+    float koef_model = (float)(1) / 5;
+
     std::ifstream file("vertexes.txt");
     assert(!!file);
     ns::Triangle_2 tr1;
     ns::Triangle_2 tr2;
-    file >> tr1 >> tr2;
+    file >> koef_minimap >> koef_model >> tr1 >> tr2;
+    float x = (1 - koef_model) / 2;
 
+    tr1.init(koef_model);
+    tr2.init(koef_model);
     float time = engine->get_time();
-    float s = sin(time) * 4 / 10;
-    float c = cos(time) * 4 / 10;
+    float s = sin(time) * x;
+    float c = cos(time) * x;
 
     for (auto& v : tr1.t_back) {
       v.x += c;
@@ -57,7 +63,7 @@ int main(int /*argc*/, char* /*argv*/ []) {
       v.y += s;
     }
 
-    engine->render_quad(tr1, tr2);
+    engine->render_quad(tr1, tr2, koef_minimap);
 
     engine->swap_buffers();
   }
